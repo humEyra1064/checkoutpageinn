@@ -8,16 +8,16 @@ window.addEventListener("load", () => {
     // localStorage.setItem("shippingFreePrice", shippingFreePrice);
 
     //show chart totals on window load!
-    calculateCartPrice();
+    calculateCartPrice(); //sayfa yüklendiğinde otomatik olarak ürünler var olduğu için cart ın yani sepetin fiyatı hesaplanmış ve ekrana basılmış olmalı
 
 });
-
+//+ btn, - btn ,remove btn için ayrı ayrı eventlistener tanımlasak 100 ürün olduğunda veya yeni eklenen ürünlerde tekrar tekrar gezmek zorunda olmayalım diye yakalamak istediğimiz elementlerin en yakın parentini yakalıyoruz.
 const productsDiv = document.querySelector(".products");
-//Capturing ==> Static closest Parent ------> Children
+//Capturing ==> Static closest Parent ------> Children(dıştaki parenttan ulaşmak istediğim elemente doğru yakalama)yani ben parent elemente tıkladığımda içindeki diğer elementler de tetiklenmiş oluyor.
 productsDiv.addEventListener("click", (e) => {
     //e.target vs. e.currentTarget
-    // alert(e.target.tagName);
-    // alert(e.currentTarget.className);
+    // alert(e.target.tagName);target ile yakaladığım elementin tagName i gelir
+    // alert(e.currentTarget.className); currentTarget ile yakaladığım elementin en yakın parentinin classsName ini alır.
     if (e.target.className === "fa-solid fa-minus") {
         // alert("minus btn clicked");
         if (e.target.nextElementSibling.innerText > 1) {
@@ -35,7 +35,7 @@ productsDiv.addEventListener("click", (e) => {
     else if (e.target.classList.contains("fa-plus")) {
         // alert("plus btn clicked");
         e.target.parentElement.querySelector(".quantity").innerText++;
-        calculateProductPrice(e.target);
+        calculateProductPrice(e.target);//neden e.target yazdık çünkü hangi ürünün toplam fiyatını hesaplıyorum?o ürünü yakalamam  ve ulaşmam gerek.
         calculateCartPrice();
     }
     else if (e.target.getAttribute("class") == "remove-product") {
@@ -52,8 +52,8 @@ productsDiv.addEventListener("click", (e) => {
 });
 
 const calculateProductPrice = (target) => {
-    //each product total calculation
-    //productTotalPrice => quantity * price
+    //each product total calculation bu fonksiyon ürün bazında fiyat hesaplaması yapıyor.
+    //productTotalPrice => quantity * price + btnuna bastım veya - butonuna bastım veya remove butonuna bastım o ürünün bilgilerine ulaşmakiçin  aynı zamanda span içinde yazan fiyatı da yakalamalıyım bunların hepsini kapsayan product-info divini yakalamalıyım.
     const productInfoDiv = target.closest(".product-info");
     console.log(productInfoDiv);
     //unit price
@@ -65,7 +65,7 @@ const calculateProductPrice = (target) => {
 }
 
 const calculateCartPrice = () => {
-    //cart total calculation from all products
+    //cart total calculation from all products bu fonksiyon toplam sepet bazında hesaplama yapıyor
     //NodeList
     const productLinePriceDivs = document.querySelectorAll(".product-line-price");
     // const productLinePriceDivs = document.getElementsByClassName("product-line-price");
