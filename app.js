@@ -23,11 +23,12 @@ productsDiv.addEventListener("click", (e) => {
         if (e.target.nextElementSibling.innerText > 1) {
             e.target.nextElementSibling.innerText--;
             calculateProductPrice(e.target);
+            //1 den büyük ise - butonuna bastığımızda birer birer azaltıp aynı zamanda product fiyat hesabını yapacak çağrılan fonksiyonla
         }
         else {
-            //innerText vs. textContent(whitespaces)
+            //innerText vs. textContent(whitespaces) textContent boşlukları da içine alacak şekilde bizim önümüze serer.
             if (confirm(`${e.target.closest(".product-info").querySelector("h2").innerText} will be removed!`)) {
-                e.target.closest(".product").remove();
+                e.target.closest(".product").remove();//ürünü silecek ,closest parentlara çıkmaya çalışmadan direkt nokta atışı ile alıyor.
             }
         }
         calculateCartPrice();
@@ -53,15 +54,16 @@ productsDiv.addEventListener("click", (e) => {
 
 const calculateProductPrice = (target) => {
     //each product total calculation bu fonksiyon ürün bazında fiyat hesaplaması yapıyor.
-    //productTotalPrice => quantity * price + btnuna bastım veya - butonuna bastım veya remove butonuna bastım o ürünün bilgilerine ulaşmakiçin  aynı zamanda span içinde yazan fiyatı da yakalamalıyım bunların hepsini kapsayan product-info divini yakalamalıyım.
+    //productTotalPrice => quantity * price (quantity p nin içindeki artıp azalan ürün adedi ,price de product in içindeki strong ile çevrelenmiş fiyat bunları çarparak productun toplam fiyatını hesaplayacağız)+ btnuna bastım veya - butonuna bastım veya remove butonuna bastım o ürünün bilgilerine ulaşmakiçin  aynı zamanda span içinde yazan fiyatı da yakalamalıyım bunların hepsini kapsayan*** product-info***divini yakalamalıyım.
     const productInfoDiv = target.closest(".product-info");
     console.log(productInfoDiv);
     //unit price
-    //div.class vs. .class as performance
+    //div.class vs. .class as performance başına div. yazamasak da olur ama bu şekilde direkt nokta atışı oluyor ve daha hızlı çalışıyor.
     const price = productInfoDiv.querySelector("div.product-price strong").innerText;
     //quantity
     const quantity = productInfoDiv.querySelector("p.quantity").innerText;
     productInfoDiv.querySelector("div.product-line-price").innerText = (price * quantity).toFixed(2);
+    //product line price classı ürünün altında yazan product total kısmının classı ,hesapladığımız şeyi oranın innertext ine göndermemiz gerek atamamız gerek.
 }
 
 const calculateCartPrice = () => {
